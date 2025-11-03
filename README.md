@@ -1,5 +1,7 @@
 # Cross-View Code Alignment for Image Hashing in the Age of Foundation Models
 
+[![arXiv](https://img.shields.io/badge/arXiv-2510.27584-b31b1b.svg)](https://arxiv.org/abs/2510.27584)
+
 ## 👩‍💻 Authors
 
 <sup>1</sup> Ilyass Moummad, <sup>1,2</sup> Kawtar Zaher, <sup>3</sup> Hervé Goëau, <sup>1</sup> Alexis Joly
@@ -68,13 +70,13 @@ python main.py --encoder dinov3 --hashcoder small --dataset cifar10 --data_dir p
 ## 📝 To cite this work:
 
 ```
-@misc{hashingbaseline,
-      title={Cross-View Code Alignment for Image Hashing in the Age of Foundation Models}, 
+@misc{crovca,
+      title={Image Hashing via Cross-View Code Alignment in the Age of Foundation Models}, 
       author={Ilyass Moummad and Kawtar Zaher and Hervé Goëau and Alexis Joly},
       year={2025},
-      eprint={},
+      eprint={2510.27584},
       archivePrefix={arXiv},
-      primaryClass={},
-      url={}, 
+      primaryClass={cs.CV},
+      url={https://arxiv.org/abs/2510.27584}, 
 }
 ```
