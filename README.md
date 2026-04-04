@@ -1,4 +1,4 @@
-# Cross-View Code Alignment for Image Hashing in the Age of Foundation Models
+# Cross-View Code Alignment for Image Hashing in the Age of Foundation Models (CVPRW 2026 ECV)
 
 [![arXiv](https://img.shields.io/badge/arXiv-2510.27584-b31b1b.svg)](https://arxiv.org/abs/2510.27584)
 
