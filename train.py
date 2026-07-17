@@ -4,8 +4,12 @@ from tqdm import tqdm
 
 def get_features(encoder, x, model_name: str):
     """Extract features depending on model type."""
-    if "dinov2" in model_name.lower() or "simdinov2" in model_name.lower():
+    # if "dinov2" in model_name.lower() or "simdinov2" in model_name.lower():
+    #     return encoder(x)["x_norm_clstoken"]
+    if "simdinov2" in model_name.lower():
         return encoder(x)["x_norm_clstoken"]
+    elif "dinov2" in model_name.lower():
+        return encoder(x).pooler_output
     elif "dinov3" in model_name.lower():
         return encoder(x).pooler_output
     elif "dfn" in model_name.lower():

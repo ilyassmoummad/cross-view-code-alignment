@@ -59,10 +59,18 @@ pip install -r requirements.txt
 
 ## 📊 Example Usage
 
-Unsupervised hashing on CIFAR-10:
+The following examples train an unsupervised hashing model on **CIFAR-10**.
 
+#### Using DINOv3
 ```bash 
 python main.py --encoder dinov3 --hashcoder small --lora --dataset cifar10 --data_dir path_to_data --bitdim 16 --epochs 5 --device cuda:0
+```
+
+#### Using SWAG
+
+> **Note:** SWAG requires a **384×384** input resolution.
+```bash 
+python main.py --encoder swag --resize_size 384 --crop_size 384 --hashcoder small --dataset cifar10 --data_dir path_to_data --bitdim 16 --epochs 5 --device cuda:0
 ```
 
 ---

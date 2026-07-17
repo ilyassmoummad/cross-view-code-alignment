@@ -20,6 +20,18 @@ MODEL_REGISTRY = {
         "dim": 768,
         "ckpt": None
     },
+    # SWAG
+    "swag": {
+        "loader": lambda _: vit_b_16(weights=ViT_B_16_Weights.IMAGENET1K_SWAG_E2E_V1),
+        "dim": 768,
+        "ckpt": None
+    },
+    # DINOv2
+    "dinov2": {
+        "loader": lambda ckpt: AutoModel.from_pretrained(ckpt, device_map="auto"),
+        "dim": 768,
+        "ckpt": "facebook/dinov2-base"
+    },
     # DINOv3
     "dinov3": {
         "loader": lambda ckpt: AutoModel.from_pretrained(ckpt, device_map="auto"),
@@ -52,6 +64,8 @@ def get_encoder(args):
 
     # Load encoder
     encoder = info["loader"](ckpt)
+    if encoder == 'dfn':
+        encoder = encoder[0]
 
     # For torchvision ViTs, replace classifier head with Identity
     if hasattr(encoder, "heads"):

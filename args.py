@@ -27,7 +27,7 @@ def get_args():
     # Model
     # -----------------------
     parser.add_argument("--encoder", type=str, default="deit", 
-                        choices=["dfn", "dinov3", "deit"],
+                        choices=["dfn", "dinov3", "deit", "swag", "dinov2", "simdinov2"],
                         help="Encoder backbone")
     parser.add_argument("--hashcoder", type=str, default="small", 
                         choices=["small", "large"],
