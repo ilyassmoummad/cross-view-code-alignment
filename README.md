@@ -70,7 +70,7 @@ python main.py --encoder dinov3 --hashcoder small --lora --dataset cifar10 --dat
 
 > **Note:** SWAG requires a **384×384** input resolution.
 ```bash 
-python main.py --encoder swag --resize_size 384 --crop_size 384 --hashcoder small --dataset cifar10 --data_dir path_to_data --bitdim 16 --epochs 5 --device cuda:0
+python main.py --encoder swag --resize_size 384 --crop_size 384 --hashcoder small --lora --dataset cifar10 --data_dir path_to_data --bitdim 16 --epochs 5 --device cuda:0
 ```
 
 ---
