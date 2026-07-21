@@ -19,8 +19,8 @@ from torch.nn.init import trunc_normal_
 
 import sys, os
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(os.path.abspath(__file__)), '../..')))
-from layers import Mlp, PatchEmbed, SwiGLUFFNFused, Block, NestedTensorBlock #
-from layers.attention import Attention, MemEffAttention
+from vit.layers import Mlp, PatchEmbed, SwiGLUFFNFused, Block, NestedTensorBlock #
+from vit.layers.attention import Attention, MemEffAttention
 
 logger = logging.getLogger("dinov2")
 
