@@ -42,22 +42,26 @@ DATASET_REGISTRY = {
     "flickr25k": {
         "class": BaseDataset,
         "base_url": "https://raw.githubusercontent.com/swuxyj/DeepHash-pytorch/master/data/mirflickr/",
-        "map_k": 5000
+        "map_k": 5000,
+        "num_classes": 24,
     },
     "nuswide": {
         "class": BaseDataset,
         "base_url": "https://raw.githubusercontent.com/swuxyj/DeepHash-pytorch/master/data/nuswide_21/",
-        "map_k": 5000
+        "map_k": 5000,
+        "num_classes": 21,
     },
     "coco": {
         "class": BaseDataset,
         "base_url": "https://raw.githubusercontent.com/swuxyj/DeepHash-pytorch/master/data/coco/",
-        "map_k": 5000
+        "map_k": 5000,
+        "num_classes": 80,
     },
     "imagenet100": {
         "class": BaseDataset,
         "base_url": "https://raw.githubusercontent.com/swuxyj/DeepHash-pytorch/master/data/imagenet/",
-        "map_k": 1000
+        "map_k": 1000,
+        "num_classes": 100,
     },
 }
 
@@ -78,6 +82,8 @@ def get_dataloaders(args, train_transform=None, eval_transform=None, train_drop_
     Handles CIFAR10 and text-based datasets in a unified way.
     """
     if args.dataset == "cifar10":
+        args.num_classes = 10
+
         train_dataset = datasets.CIFAR10(root=args.data_dir, train=True, transform=train_transform, download=True)
         database_dataset = datasets.CIFAR10(root=args.data_dir, train=True, transform=eval_transform, download=True)
         query_dataset = datasets.CIFAR10(root=args.data_dir, train=False, transform=eval_transform, download=True)
@@ -92,6 +98,8 @@ def get_dataloaders(args, train_transform=None, eval_transform=None, train_drop_
 
     elif args.dataset in DATASET_REGISTRY:
         dataset_info = DATASET_REGISTRY[args.dataset]
+
+        args.num_classes = dataset_info["num_classes"]
 
         train_loader = _get_loader(args.data_dir, "train", train_transform, dataset_info,
                                    batch_size=args.bs, num_workers=args.n_workers, shuffle=True, drop_last=train_drop_last)
