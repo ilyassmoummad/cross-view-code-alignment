@@ -64,15 +64,17 @@ def train_epoch(encoder, projector, train_loader, optimizer, criterion_inv, crit
             # --- Project ---
             projs = [projector(f) for f in feats]
 
-            print("labels", labels.shape)
-            print("projs[0]", projs[0].shape)
-
-            quit()
-
             # --- Supervised or Unsupervised coding ---
             if args.supervised:
 
                 labels = labels.to(args.device).float()
+
+                if labels.ndim == 1:
+                    # CIFAR10 / ImageNet style labels
+                    labels = torch.nn.functional.one_hot(labels.long(), num_classes=args.num_classes).float()
+                else:
+                    # COCO / NUS-WIDE / Flickr style labels
+                    labels = labels.float()
 
                 # Combine projections from all views
                 all_proj = torch.cat(projs, dim=0) # [B*num_views, D]
