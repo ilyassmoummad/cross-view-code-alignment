@@ -74,7 +74,7 @@ python main.py --encoder dinov3 --hashcoder small --lora --dataset cifar10 --dat
 ```bash 
 python main.py --encoder swag --resize_size 384 --crop_size 384 --hashcoder small --lora --dataset cifar10 --data_dir path_to_data --bitdim 16 --epochs 5 --device cuda:0
 ```
-> For additional encoders, check the available options in `args.py`.
+> For additional encoders and datasets, check the available options in `args.py` (`--encoder` and `--dataset`).
 ---
 
 ## 📝 To cite this work:

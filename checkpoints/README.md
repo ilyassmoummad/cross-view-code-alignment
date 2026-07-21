@@ -1,0 +1,1 @@
+Download the pretrained **SimDINOv2 ViT-Base** checkpoint from this [link](https://drive.google.com/file/d/1g_f3aEFdfiKCn8IH11Y4FwtEDu1pPbQv/view?usp=drive_link), and place the downloaded checkpoint file in this folder.

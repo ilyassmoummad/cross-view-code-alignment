@@ -41,7 +41,7 @@ MODEL_REGISTRY = {
     "simdinov2": {
         "loader": load_simdinov2,
         "dim": 768,
-        "ckpt": "/path/to/simdinov2_checkpoint.pth"
+        "ckpt": "./checkpoints/vitb16_reg4_SimDNIOv2_ep100.pth"
     },
     # SWAG
     "swag": {
