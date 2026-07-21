@@ -586,14 +586,13 @@ def vit_giant2(patch_size=16, num_register_tokens=0, block="nested", **kwargs):
     return model
 
 def get_block_fn(block):
-    match block:
-        case "nested":
-            return partial(NestedTensorBlock, attn_class=MemEffAttention)
-        case "memeff":
-            return partial(Block, attn_class=MemEffAttention)
-        case "base":
-            return partial(Block, attn_class=Attention)
-    raise ValueError(f"Unkown block type: {block}")
+    if block == "nested":
+        return partial(NestedTensorBlock, attn_class=MemEffAttention)
+    elif block == "memeff":
+        return partial(Block, attn_class=MemEffAttention)
+    elif block == "base":
+        return partial(Block, attn_class=Attention)
+    raise ValueError(f"Unknown block type: {block}")
 
 if __name__ == "__main__":
     #table for all models with params, embed, depth, heads, mlp_ratio
