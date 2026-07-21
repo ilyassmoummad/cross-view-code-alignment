@@ -64,36 +64,13 @@ def train_epoch(encoder, projector, train_loader, optimizer, criterion_inv, crit
             # --- Project ---
             projs = [projector(f) for f in feats]
 
+            print("labels", labels.shape)
+            print("projs[0]", projs[0].shape)
+
+            quit()
+
             # --- Supervised or Unsupervised coding ---
             if args.supervised:
-                # if labels.ndim > 1:  # one-hot → class indices
-                #     labels = labels.argmax(dim=1)
-
-                # all_proj = torch.cat(projs, dim=0)
-                # all_labels = torch.cat([labels for _ in projs], dim=0)
-
-                # # class means
-                # class_means = {
-                #     c.item(): all_proj[all_labels == c].mean(dim=0, keepdim=True)
-                #     for c in all_labels.unique()
-                # }
-
-                # # each view uses codes from its class mean
-                # all_codes = [
-                #     torch.cat(
-                #         [(class_means[c.item()] > 0).to(all_proj.dtype) for c in labels],
-                #         dim=0,
-                #     )
-                #     for _ in projs
-                # ]
-                
-                # labels:
-                # mono-label: [B]
-                # multi-label: [B, C]
-                # if labels.ndim == 1:
-                #     labels = torch.nn.functional.one_hot(labels, num_classes=args.num_classes).float()
-                # else:
-                #     labels = labels.float()
 
                 labels = labels.to(args.device).float()
 
