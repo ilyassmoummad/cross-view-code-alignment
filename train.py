@@ -90,10 +90,10 @@ def train_epoch(encoder, projector, train_loader, optimizer, criterion_inv, crit
                 # labels:
                 # mono-label: [B]
                 # multi-label: [B, C]
-                if labels.ndim == 1:
-                    labels = torch.nn.functional.one_hot(labels, num_classes=args.num_classes).float()
-                else:
-                    labels = labels.float()
+                # if labels.ndim == 1:
+                #     labels = torch.nn.functional.one_hot(labels, num_classes=args.num_classes).float()
+                # else:
+                #     labels = labels.float()
 
                 # Combine projections from all views
                 all_proj = torch.cat(projs, dim=0) # [B*num_views, D]
