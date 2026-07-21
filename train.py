@@ -95,7 +95,7 @@ def train_epoch(encoder, projector, train_loader, optimizer, criterion_inv, crit
                 # else:
                 #     labels = labels.float()
 
-                labels = labels.to(args.device)
+                labels = labels.to(args.device).float()
 
                 # Combine projections from all views
                 all_proj = torch.cat(projs, dim=0) # [B*num_views, D]
