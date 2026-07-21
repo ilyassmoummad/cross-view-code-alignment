@@ -4,8 +4,6 @@ from tqdm import tqdm
 
 def get_features(encoder, x, model_name: str):
     """Extract features depending on model type."""
-    # if "dinov2" in model_name.lower() or "simdinov2" in model_name.lower():
-    #     return encoder(x)["x_norm_clstoken"]
     if "simdinov2" in model_name.lower():
         return encoder(x)["x_norm_clstoken"]
     elif "dinov2" in model_name.lower():
@@ -68,26 +66,60 @@ def train_epoch(encoder, projector, train_loader, optimizer, criterion_inv, crit
 
             # --- Supervised or Unsupervised coding ---
             if args.supervised:
-                if labels.ndim > 1:  # one-hot → class indices
-                    labels = labels.argmax(dim=1)
+                # if labels.ndim > 1:  # one-hot → class indices
+                #     labels = labels.argmax(dim=1)
 
-                all_proj = torch.cat(projs, dim=0)
-                all_labels = torch.cat([labels for _ in projs], dim=0)
+                # all_proj = torch.cat(projs, dim=0)
+                # all_labels = torch.cat([labels for _ in projs], dim=0)
 
-                # class means
-                class_means = {
-                    c.item(): all_proj[all_labels == c].mean(dim=0, keepdim=True)
-                    for c in all_labels.unique()
-                }
+                # # class means
+                # class_means = {
+                #     c.item(): all_proj[all_labels == c].mean(dim=0, keepdim=True)
+                #     for c in all_labels.unique()
+                # }
 
-                # each view uses codes from its class mean
-                all_codes = [
-                    torch.cat(
-                        [(class_means[c.item()] > 0).to(all_proj.dtype) for c in labels],
-                        dim=0,
-                    )
-                    for _ in projs
-                ]
+                # # each view uses codes from its class mean
+                # all_codes = [
+                #     torch.cat(
+                #         [(class_means[c.item()] > 0).to(all_proj.dtype) for c in labels],
+                #         dim=0,
+                #     )
+                #     for _ in projs
+                # ]
+                
+                # labels:
+                # mono-label: [B]
+                # multi-label: [B, C]
+                if labels.ndim == 1:
+                    labels = torch.nn.functional.one_hot(labels, num_classes=args.num_classes).float()
+                else:
+                    labels = labels.float()
+
+                # Combine projections from all views
+                all_proj = torch.cat(projs, dim=0) # [B*num_views, D]
+                all_labels = torch.cat([labels for _ in projs],  dim=0) # [B*num_views, C]
+
+                # ---- Compute label prototypes ----
+                # [C,D] = [C,B] @ [B,D]
+                label_means = all_labels.T @ all_proj
+
+                # normalize by number of samples per label
+                label_counts = all_labels.sum(dim=0, keepdim=True).T
+                label_means = label_means / label_counts.clamp_min(1)
+
+                # ---- Build image prototypes from active labels ----
+                # [B,D] = [B,C] @ [C,D]
+                sample_codes = labels @ label_means
+
+                # average over active labels
+                sample_label_counts = labels.sum(dim=1, keepdim=True)
+                sample_codes = sample_codes / sample_label_counts.clamp_min(1)
+
+                # binary codes
+                sample_codes = (sample_codes > 0).to(all_proj.dtype)
+
+                # one target per view
+                all_codes = [sample_codes for _ in projs]
 
             else:  # unsupervised: threshold per-view projection
                 all_codes = [(p > 0).to(p.dtype) for p in projs]

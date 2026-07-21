@@ -1,3 +1,5 @@
+from json import encoder
+
 import torch
 import torch.nn as nn
 from torch.nn.init import trunc_normal_
@@ -5,6 +7,21 @@ from torchvision.models import vit_b_16, ViT_B_16_Weights
 from transformers import AutoModel
 import open_clip
 from peft import LoraConfig, get_peft_model
+from vit import vit_base
+import re
+
+
+def load_simdinov2(checkpoint_path):
+    """
+    Load SimDINOv2 ViT-B backbone.
+    """
+    model = vit_base(patch_size=16, img_size=224, init_values=0.1, block_chunks=0, num_register_tokens=4)
+
+    state_dict = torch.load(checkpoint_path, map_location="cpu")["teacher"]
+    state_dict = {k.replace("backbone.", ""): v for k, v in state_dict.items() if k.startswith("backbone.")}
+    state_dict = {remap_simdino_key(k): v for k, v in state_dict.items()}
+
+    return model
 
 
 MODEL_REGISTRY = {
@@ -20,6 +37,12 @@ MODEL_REGISTRY = {
         "dim": 768,
         "ckpt": None
     },
+    # SimDINOv2
+    "simdinov2": {
+        "loader": load_simdinov2,
+        "dim": 768,
+        "ckpt": "/path/to/simdinov2_checkpoint.pth"
+    },
     # SWAG
     "swag": {
         "loader": lambda _: vit_b_16(weights=ViT_B_16_Weights.IMAGENET1K_SWAG_E2E_V1),
@@ -30,7 +53,7 @@ MODEL_REGISTRY = {
     "dinov2": {
         "loader": lambda ckpt: AutoModel.from_pretrained(ckpt, device_map="auto"),
         "dim": 768,
-        "ckpt": "facebook/dinov2-base"
+        "ckpt": "facebook/dinov2-with-registers-base"
     },
     # DINOv3
     "dinov3": {
@@ -39,6 +62,13 @@ MODEL_REGISTRY = {
         "ckpt": "facebook/dinov3-vitb16-pretrain-lvd1689m"
     },
 }
+
+
+def remap_simdino_key(key):
+    """
+    Adapt SimDINOv2 checkpoint naming to local ViT implementation.
+    """
+    return re.sub(r"blocks\.(\d+)\.(\d+)\.", r"blocks.\1.", key)
 
 
 def get_encoder(args):

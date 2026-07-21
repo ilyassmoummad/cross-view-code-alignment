@@ -55,6 +55,8 @@ Install required packages (see `requirements.txt`) to ensure dependencies like `
 pip install -r requirements.txt
 ```
 
+To use **SimDINOv2** as an encoder, download the ViT-B `.pth` checkpoint file from their official [repository](https://github.com/RobinWu218/SimDINO).
+
 ---
 
 ## 📊 Example Usage
@@ -72,7 +74,7 @@ python main.py --encoder dinov3 --hashcoder small --lora --dataset cifar10 --dat
 ```bash 
 python main.py --encoder swag --resize_size 384 --crop_size 384 --hashcoder small --lora --dataset cifar10 --data_dir path_to_data --bitdim 16 --epochs 5 --device cuda:0
 ```
-
+> For additional encoders, check the available options in `args.py`.
 ---
 
 ## 📝 To cite this work:
