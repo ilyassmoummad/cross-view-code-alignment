@@ -5,7 +5,7 @@ from torchvision.models import vit_b_16, ViT_B_16_Weights
 from transformers import AutoModel
 import open_clip
 from peft import LoraConfig, get_peft_model
-from vit import vit_base
+from vision_transformer import vit_base
 import re
 
 
