@@ -13,7 +13,7 @@ def remap_simdino_key(key):
     """
     Adapt SimDINOv2 checkpoint naming to local ViT implementation.
     """
-    return re.sub(r"blocks\.\d+\.(?=\d+)", "blocks.", k)
+    return re.sub(r"blocks\.\d+\.(?=\d+)", "blocks.", key)
 
 
 def load_simdinov2(checkpoint_path):
