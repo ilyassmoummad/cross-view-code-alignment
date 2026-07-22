@@ -9,6 +9,13 @@ from vit import vit_base
 import re
 
 
+def remap_simdino_key(key):
+    """
+    Adapt SimDINOv2 checkpoint naming to local ViT implementation.
+    """
+    return re.sub(r"blocks\.\d+\.(?=\d+)", "blocks.", k)
+
+
 def load_simdinov2(checkpoint_path):
     """
     Load SimDINOv2 ViT-B backbone.
@@ -68,13 +75,6 @@ MODEL_REGISTRY = {
         "lora_targets": ["q_proj", "v_proj"],
     },
 }
-
-
-def remap_simdino_key(key):
-    """
-    Adapt SimDINOv2 checkpoint naming to local ViT implementation.
-    """
-    return re.sub(r"blocks\.(\d+)\.(\d+)\.", r"blocks.\1.", key)
 
 
 def get_encoder(args):
