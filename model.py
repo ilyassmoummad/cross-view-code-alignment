@@ -29,37 +29,43 @@ MODEL_REGISTRY = {
     "dfn": {
         "loader": lambda ckpt: open_clip.create_model_from_pretrained(ckpt),
         "dim": 512,
-        "ckpt": "hf-hub:apple/DFN2B-CLIP-ViT-B-16"
+        "ckpt": "hf-hub:apple/DFN2B-CLIP-ViT-B-16",
+        "lora_targets": ["attn"],
     },
     # DeiT
     "deit": {
         "loader": lambda _: vit_b_16(weights=ViT_B_16_Weights.IMAGENET1K_V1),
         "dim": 768,
-        "ckpt": None
+        "ckpt": None,
+        "lora_targets": ["self_attention"],
     },
     # SimDINOv2
     "simdinov2": {
         "loader": load_simdinov2,
         "dim": 768,
-        "ckpt": "./checkpoints/vitb16_reg4_SimDNIOv2_ep100.pth"
+        "ckpt": "./checkpoints/vitb16_reg4_SimDNIOv2_ep100.pth",
+        "lora_targets": ["qkv"],
     },
     # SWAG
     "swag": {
         "loader": lambda _: vit_b_16(weights=ViT_B_16_Weights.IMAGENET1K_SWAG_E2E_V1),
         "dim": 768,
-        "ckpt": None
+        "ckpt": None,
+        "lora_targets": ["self_attention"],
     },
     # DINOv2
     "dinov2": {
         "loader": lambda ckpt: AutoModel.from_pretrained(ckpt, device_map="auto"),
         "dim": 768,
-        "ckpt": "facebook/dinov2-with-registers-base"
+        "ckpt": "facebook/dinov2-with-registers-base",
+        "lora_targets": ["query", "value"],
     },
     # DINOv3
     "dinov3": {
         "loader": lambda ckpt: AutoModel.from_pretrained(ckpt, device_map="auto"),
         "dim": 768,
-        "ckpt": "facebook/dinov3-vitb16-pretrain-lvd1689m"
+        "ckpt": "facebook/dinov3-vitb16-pretrain-lvd1689m",
+        "lora_targets": ["q_proj", "v_proj"],
     },
 }
 
@@ -106,7 +112,7 @@ def get_encoder(args):
         lora_config = LoraConfig(
             r=getattr(args, "lora_rank", 16),
             lora_alpha=getattr(args, "lora_rank", 16),
-            target_modules=["q_proj", "v_proj", "self_attention", "attn"],  # covers most cases
+            target_modules=info["lora_targets"],
             lora_dropout=getattr(args, "lora_dropout", 0.1),
             bias="none"
         )
