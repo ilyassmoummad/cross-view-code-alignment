@@ -19,6 +19,8 @@ def load_simdinov2(checkpoint_path):
     state_dict = {k.replace("backbone.", ""): v for k, v in state_dict.items() if k.startswith("backbone.")}
     state_dict = {remap_simdino_key(k): v for k, v in state_dict.items()}
 
+    model.load_state_dict(state_dict, strict=True)
+
     return model
 
 
