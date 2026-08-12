@@ -60,8 +60,8 @@ def compute_retrieval(query_features, query_logits, database_features, database_
 
     if 'continuous' in retrieval_methods:
         # Cosine similarity
-        dist = torch.mm(F.normalize(query_features, dim=-1).to(args.device),
-                        F.normalize(database_features.t(), dim=-1).to(args.device))
+        dist = torch.mm(F.normalize(query_features.to(args.device), dim=-1),
+                        F.normalize(database_features.to(args.device), dim=-1).t())
         _, topk_idx = dist.topk(map_k, largest=True, sorted=True)
         results['continuous'] = topk_idx.cpu()
 
